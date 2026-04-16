@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>NewsMix • WSJ + TechCrunch + Business</title>
+  <!-- Tailwind CSS + Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    body { background: #f4f6fa; }
+    .shuffle-transition { transition: all 0.2s ease; }
+    .card-hover:hover { transform: translateY(-3px); box-shadow: 0 20px 25px -12px rgba(0,0,0,0.1); }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- header with filter tabs -->
+  <header class="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 bg-gradient-to-br from-gray-900 to-gray-700 rounded-xl flex items-center justify-center shadow-md">
+            <span class="text-white text-xl">📰</span>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900">News<span class="text-gray-500">Mix</span></h1>
+            <p class="text-xs text-gray-400 mt-0">WSJ · TechCrunch · Business</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button data-filter="all" class="filter-btn active-filter px-4 py-1.5 rounded-full text-sm font-medium transition-all bg-black text-white shadow-sm">All news</button>
+          <button data-filter="wsj.com" class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium transition-all bg-white text-gray-700 border border-gray-300 hover:bg-gray-100">Wall Street Journal</button>
+          <button data-filter="techcrunch" class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium transition-all bg-white text-gray-700 border border-gray-300 hover:bg-gray-100">TechCrunch</button>
+          <button data-filter="business" class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium transition-all bg-white text-gray-700 border border-gray-300 hover:bg-gray-100">Business US</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <!-- toolbar: refresh & shuffle info -->
+    <div class="flex flex-wrap justify-between items-center mb-8 gap-4">
+      <div class="flex items-center gap-3 text-sm text-gray-500 bg-white/70 rounded-full px-4 py-2">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        </span>
+        <span id="newsCount">0</span> <span>stories · randomized order</span>
+      </div>
+      <button id="refreshBtn" class="inline-flex items-center gap-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-medium px-5 py-2 rounded-full transition shadow-sm text-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+        🔄 Shuffle & reload
+      </button>
+    </div>
+
+    <!-- loading skeleton -->
+    <div id="loadingSkeleton" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+      <!-- 6 placeholder cards -->
+      <div class="animate-pulse bg-white rounded-2xl overflow-hidden shadow-sm h-80"><div class="h-40 bg-gray-200"></div><div class="p-4 space-y-3"><div class="h-5 bg-gray-200 rounded w-3/4"></div><div class="h-4 bg-gray-200 rounded w-full"></div><div class="h-4 bg-gray-200 rounded w-5/6"></div></div></div>
+      <div class="animate-pulse bg-white rounded-2xl overflow-hidden shadow-sm h-80"><div class="h-40 bg-gray-200"></div><div class="p-4 space-y-3"><div class="h-5 bg-gray-200 rounded w-3/4"></div><div class="h-4 bg-gray-200 rounded w-full"></div><div class="h-4 bg-gray-200 rounded w-5/6"></div></div></div>
+      <div class="animate-pulse bg-white rounded-2xl overflow-hidden shadow-sm h-80"><div class="h-40 bg-gray-200"></div><div class="p-4 space-y-3"><div class="h-5 bg-gray-200 rounded w-3/4"></div><div class="h-4 bg-gray-200 rounded w-full"></div><div class="h-4 bg-gray-200 rounded w-5/6"></div></div></div>
+    </div>
+
+    <!-- news grid -->
+    <div id="newsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7"></div>
+
+    <!-- empty state -->
+    <div id="emptyState" class="hidden text-center bg-white/60 rounded-2xl p-12 mt-6 border border-dashed border-gray-300">
+      <div class="text-5xl mb-3">🌀</div>
+      <h3 class="text-xl font-medium text-gray-800">No stories match this filter</h3>
+      <p class="text-gray-500 mt-1">Try changing the category or refresh with "All news"</p>
+    </div>
+  </main>
+
+  <footer class="border-t border-gray-200 mt-12 py-6 text-center text-xs text-gray-400">
+    NewsMix • aggregated from WSJ, TechCrunch & US Business headlines • random shuffle on each load
+  </footer>
+
+  <script>
+    // ----- CONFIGURATION -----
+    const API_KEY = 'd3343faad5c34d0598ec357627d1cecb';
+    
+    // Three different endpoints as requested
+    const ENDPOINTS = [
+      { name: 'wsj.com', url: `https://newsapi.org/v2/everything?domains=wsj.com&apiKey=${API_KEY}`, type: 'wsj.com' },
+      { name: 'techcrunch', url: `https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=${API_KEY}`, type: 'techcrunch' },
+      { name: 'business', url: `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=${API_KEY}`, type: 'business' }
+    ];
+
+    let allArticles = [];        // store all fetched + flattened + source-tagged
+    let currentFilter = 'all';   // 'all', 'wsj.com', 'techcrunch', 'business'
+    
+    const newsGrid = document.getElementById('newsGrid');
+    const loadingSkeleton = document.getElementById('loadingSkeleton');
+    const emptyState = document.getElementById('emptyState');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const newsCountSpan = document.getElementById('newsCount');
+    
+    // Helper: Fisher-Yates shuffle (randomize order)
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+    
+    // Helper: get fallback image based on source type
+    function getImageUrl(article, sourceType) {
+      if (article.urlToImage && article.urlToImage.startsWith('http')) return article.urlToImage;
+      const fallbacks = {
+        'wsj.com': 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600&h=400&fit=crop',
+        'techcrunch': 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=400&fit=crop',
+        'business': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop'
+      };
+      return fallbacks[sourceType] || 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=600&h=400&fit=crop';
+    }
+    
+    // Format date
+    function formatDate(dateString) {
+      if (!dateString) return 'recent';
+      try {
+        return new Date(dateString).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      } catch(e) { return 'new'; }
+    }
+    
+    // Render articles based on currentFilter (and always show in the stored randomized order from allArticles)
+    function renderNews() {
+      if (!allArticles.length) {
+        newsGrid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        newsCountSpan.innerText = '0';
+        return;
+      }
+      
+      let filtered = [];
+      if (currentFilter === 'all') {
+        filtered = [...allArticles];
+      } else {
+        filtered = allArticles.filter(article => article.sourceType === currentFilter);
+      }
+      
+      newsCountSpan.innerText = filtered.length;
+      
+      if (filtered.length === 0) {
+        newsGrid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      emptyState.classList.add('hidden');
+      
+      const fragment = document.createDocumentFragment();
+      filtered.forEach(article => {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-200/80 card-hover transition-all duration-200 flex flex-col h-full';
+        const imageUrl = getImageUrl(article, article.sourceType);
+        const published = formatDate(article.publishedAt);
+        let sourceLabel = '';
+        if (article.sourceType === 'wsj.com') sourceLabel = 'WSJ';
+        else if (article.sourceType === 'techcrunch') sourceLabel = 'TechCrunch';
+        else sourceLabel = 'Business US';
+        
+        card.innerHTML = `
+          <div class="relative overflow-hidden bg-gray-100 h-44">
+            <img src="${imageUrl}" alt="${article.title.replace(/"/g, '&quot;')}" class="w-full h-full object-cover transition duration-300 hover:scale-105" onerror="this.src='https://placehold.co/600x400/e2e8f0/475569?text=News'">
+            <div class="absolute bottom-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[11px] font-medium px-2 py-0.5 rounded-full">${sourceLabel}</div>
+          </div>
+          <div class="p-5 flex flex-col flex-grow">
+            <div class="flex items-center gap-2 text-xs text-gray-500 mb-2">
+              <span>📅 ${published}</span>
+              <span class="w-1 h-1 rounded-full bg-gray-400"></span>
+              <span>📌 ${article.sourceName || sourceLabel}</span>
+            </div>
+            <h3 class="font-bold text-xl leading-tight text-gray-900 line-clamp-2 mb-2">
+              <a href="${article.url}" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 transition">${article.title}</a>
+            </h3>
+            <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mt-1 mb-4">${article.description || 'Read the full story on the original site.'}</p>
+            <div class="mt-auto pt-2">
+              <a href="${article.url}" target="_blank" class="inline-flex items-center text-sm font-medium text-gray-800 hover:text-black group gap-1 transition">
+                Read more
+                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+              </a>
+            </div>
+          </div>
+        `;
+        fragment.appendChild(card);
+      });
+      
+      newsGrid.innerHTML = '';
+      newsGrid.appendChild(fragment);
+    }
+    
+    // Fetch all three APIs, merge, attach sourceType, then shuffle & store
+    async function fetchAllNewsAndShuffle() {
+      loadingSkeleton.classList.remove('hidden');
+      newsGrid.innerHTML = '';
+      emptyState.classList.add('hidden');
+      
+      try {
+        // fetch all endpoints in parallel
+        const fetchPromises = ENDPOINTS.map(async (endpoint) => {
+          try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000);
+            const response = await fetch(endpoint.url, { signal: controller.signal });
+            clearTimeout(timeoutId);
+            if (!response.ok) throw new Error(`HTTP ${response.status} for ${endpoint.name}`);
+            const data = await response.json();
+            let articles = data.articles || [];
+            // attach sourceType and source name for filtering
+            return articles.map(article => ({
+              ...article,
+              sourceType: endpoint.type,
+              sourceName: endpoint.name === 'wsj.com' ? 'Wall Street Journal' : (endpoint.name === 'techcrunch' ? 'TechCrunch' : 'Business Insider')
+            }));
+          } catch (err) {
+            console.warn(`Failed to fetch ${endpoint.name}:`, err.message);
+            return []; // return empty for failed source
+          }
+        });
+        
+        const results = await Promise.all(fetchPromises);
+        // combine all articles from three sources
+        let combined = results.flat();
+        
+        // remove duplicates (by URL or title)
+        const uniqueMap = new Map();
+        for (const article of combined) {
+          if (!article.title || article.title === '[Removed]') continue;
+          const key = article.url || article.title;
+          if (!uniqueMap.has(key)) uniqueMap.set(key, article);
+        }
+        combined = Array.from(uniqueMap.values());
+        
+        if (combined.length === 0) throw new Error('No articles returned from any source');
+        
+        // RANDOMIZE ORDER: shuffle the combined array
+        allArticles = shuffleArray([...combined]);
+        
+        // re-render according to current filter
+        renderNews();
+      } catch (error) {
+        console.error('Global fetch error:', error);
+        newsGrid.innerHTML = `<div class="col-span-full text-center bg-white/80 p-10 rounded-2xl"><p class="text-red-600">⚠️ Failed to load news. Check API key or network.<br><span class="text-xs text-gray-400">Make sure you're running on localhost or a valid domain (NewsAPI free tier requires localhost or a backend proxy).</span></p><button id="manualRetry" class="mt-4 bg-black text-white px-4 py-2 rounded-full text-sm">⟳ Retry</button></div>`;
+        emptyState.classList.add('hidden');
+        const retryBtn = document.getElementById('manualRetry');
+        if (retryBtn) retryBtn.addEventListener('click', () => fetchAllNewsAndShuffle());
+      } finally {
+        loadingSkeleton.classList.add('hidden');
+      }
+    }
+    
+    // filter change handler + UI active style
+    function setFilter(filterValue) {
+      currentFilter = filterValue;
+      // update button styles
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        const btnFilter = btn.getAttribute('data-filter');
+        if (btnFilter === filterValue) {
+          btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+          btn.classList.add('bg-black', 'text-white', 'shadow-sm');
+        } else {
+          btn.classList.remove('bg-black', 'text-white', 'shadow-sm');
+          btn.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+        }
+      });
+      renderNews(); // re-render with existing allArticles (already shuffled)
+    }
+    
+    // refresh = fetch again + reshuffle
+    async function refreshAndShuffle() {
+      await fetchAllNewsAndShuffle();
+    }
+    
+    // Event listeners
+    refreshBtn.addEventListener('click', refreshAndShuffle);
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const filterVal = btn.getAttribute('data-filter');
+        setFilter(filterVal);
+      });
+    });
+    
+    // initial load: fetch all, shuffle, display
+    fetchAllNewsAndShuffle();
+  </script>
+</body>
+</html>
