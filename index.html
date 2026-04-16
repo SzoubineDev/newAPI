@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Zou News • Global Intelligence</title>
+  <title>Nexus News • Global Intelligence</title>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 
@@ -21,10 +22,6 @@
       --accent2:  #7fa37f;
       --accent3:  #7b9eb5;
       --danger:   #b56b6b;
-
-      --r-sm: 4px;
-      --r-md: 8px;
-      --r-lg: 12px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -42,7 +39,6 @@
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-    /* HEADER */
     header {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       background: rgba(14,14,13,0.92);
@@ -122,14 +118,12 @@
       border: 1px solid var(--border);
     }
 
-    /* MAIN */
     main {
       max-width: 1280px;
       margin: 0 auto;
       padding: 96px 32px 80px;
     }
 
-    /* MASTHEAD */
     .masthead {
       display: flex;
       align-items: flex-end;
@@ -219,7 +213,7 @@
       font-size: 13px;
       font-weight: 500;
       padding: 8px 18px;
-      border-radius: var(--r-md);
+      border-radius: 8px;
       cursor: pointer;
       transition: border-color 0.15s, color 0.15s;
     }
@@ -236,18 +230,16 @@
 
     .btn-refresh:hover svg { transform: rotate(180deg); }
 
-    /* UNIFORM GRID - all cards equal size */
     #newsGrid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1px;
       background: var(--border);
       border: 1px solid var(--border);
-      border-radius: var(--r-lg);
+      border-radius: 12px;
       overflow: hidden;
     }
 
-    /* CARD - identical dimensions */
     .news-card {
       background: var(--surface);
       display: flex;
@@ -258,7 +250,6 @@
 
     .news-card:hover { background: var(--surface2); }
 
-    /* All images have same height */
     .card-img {
       width: 100%;
       height: 200px;
@@ -369,14 +360,13 @@
 
     .card-link:hover svg { transform: translate(2px,-2px); }
 
-    /* SKELETON - also uniform */
     #loadingSkeleton {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1px;
       background: var(--border);
       border: 1px solid var(--border);
-      border-radius: var(--r-lg);
+      border-radius: 12px;
       overflow: hidden;
     }
 
@@ -400,7 +390,6 @@
       50% { opacity: 1; }
     }
 
-    /* EMPTY / ERROR */
     #emptyState {
       text-align: center;
       padding: 80px 0;
@@ -414,7 +403,6 @@
       margin-bottom: 8px;
     }
 
-    /* FOOTER */
     footer {
       border-top: 1px solid var(--border);
       padding: 24px 32px;
@@ -424,7 +412,6 @@
       letter-spacing: 0.04em;
     }
 
-    /* RESPONSIVE */
     @media (max-width: 900px) {
       .pill-nav { display: none; }
       #newsGrid,
@@ -450,7 +437,7 @@
   <header>
     <div class="header-inner">
       <a href="#" class="wordmark">
-        <span class="wordmark-n">Zou</span>
+        <span class="wordmark-n">Nexus</span>
         <span class="wordmark-dot"></span>
         <span class="wordmark-tag">News</span>
       </a>
@@ -505,7 +492,7 @@
   </footer>
 
 <script>
-  const API_KEY  = 'pub_b244314f5bb34e89af8a3da095442276';
+  const API_KEY  = 'pub_3c385cab04334f7f9ac83aed6bb9558d';
   const BASE_URL = 'https://newsdata.io/api/1/latest';
   const CATEGORIES = ['technology', 'business', 'science', 'health'];
 
@@ -518,49 +505,43 @@
   const refreshBtn     = document.getElementById('refreshBtn');
   const newsCountSpan  = document.getElementById('newsCount');
 
-  // ----- RANDOM RELATED IMAGES PER CATEGORY (online, royalty‑free)
+  // ----- RANDOM RELATED IMAGES PER CATEGORY (high-quality, royalty‑free)
   const categoryImages = {
     technology: [
       'https://images.pexels.com/photos/3585295/pexels-photo-3585295.jpeg?w=800&h=500&fit=crop',
       'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?w=800&h=500&fit=crop',
       'https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/2582937/pexels-photo-2582937.jpeg?w=800&h=500&fit=crop'
+      'https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg?w=800&h=500&fit=crop'
     ],
     business: [
       'https://images.pexels.com/photos/6802045/pexels-photo-6802045.jpeg?w=800&h=500&fit=crop',
       'https://images.pexels.com/photos/4427810/pexels-photo-4427810.jpeg?w=800&h=500&fit=crop',
       'https://images.pexels.com/photos/7146985/pexels-photo-7146985.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/4482902/pexels-photo-4482902.jpeg?w=800&h=500&fit=crop'
+      'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?w=800&h=500&fit=crop'
     ],
     science: [
       'https://images.pexels.com/photos/256383/pexels-photo-256383.jpeg?w=800&h=500&fit=crop',
       'https://images.pexels.com/photos/373543/pexels-photo-373543.jpeg?w=800&h=500&fit=crop',
       'https://images.pexels.com/photos/3987116/pexels-photo-3987116.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/2280571/pexels-photo-2280571.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/2044333/pexels-photo-2044333.jpeg?w=800&h=500&fit=crop'
+      'https://images.pexels.com/photos/2280571/pexels-photo-2280571.jpeg?w=800&h=500&fit=crop'
     ],
     health: [
       'https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg?w=800&h=500&fit=crop',
       'https://images.pexels.com/photos/2280547/pexels-photo-2280547.jpeg?w=800&h=500&fit=crop',
       'https://images.pexels.com/photos/3768915/pexels-photo-3768915.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/4386466/pexels-photo-4386466.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg?w=800&h=500&fit=crop'
+      'https://images.pexels.com/photos/4386466/pexels-photo-4386466.jpeg?w=800&h=500&fit=crop'
     ],
     general: [
       'https://images.pexels.com/photos/261763/pexels-photo-261763.jpeg?w=800&h=500&fit=crop',
       'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/113395/pexels-photo-113395.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?w=800&h=500&fit=crop'
+      'https://images.pexels.com/photos/113395/pexels-photo-113395.jpeg?w=800&h=500&fit=crop'
     ]
   };
 
   function getRandomRelatedImage(category) {
     const key = category && categoryImages[category] ? category : 'general';
     const images = categoryImages[key];
-    const randomIndex = Math.floor(Math.random() * images.length);
-    return images[randomIndex];
+    return images[Math.floor(Math.random() * images.length)];
   }
 
   function shuffleArray(arr) {
@@ -587,18 +568,47 @@
     } catch(e) { return 'Recent'; }
   }
 
-  async function fetchCategoryNews(category) {
+  // Fetch a single category with retry logic
+  async function fetchCategoryNews(category, retries = 1) {
     try {
+      const url = `${BASE_URL}?apikey=${API_KEY}&category=${category}&language=en&size=15`;
+      console.log(`Fetching ${category}:`, url);
       const ctrl = new AbortController();
-      const tid  = setTimeout(() => ctrl.abort(), 10000);
-      const res  = await fetch(`${BASE_URL}?apikey=${API_KEY}&category=${category}&language=en`, { signal: ctrl.signal });
+      const tid  = setTimeout(() => ctrl.abort(), 12000);
+      const res  = await fetch(url, { signal: ctrl.signal });
       clearTimeout(tid);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
+      console.log(`${category} response:`, data);
       if (data.status === 'error') throw new Error(data.message);
-      return (data.results || []).map(a => ({ ...a, category }));
+      const articles = data.results || [];
+      if (articles.length === 0 && retries > 0) {
+        console.warn(`${category} returned 0 articles, retrying...`);
+        await new Promise(r => setTimeout(r, 1000));
+        return fetchCategoryNews(category, retries - 1);
+      }
+      return articles.map(a => ({ ...a, category }));
+    } catch (err) {
+      console.error(`Failed ${category}:`, err.message);
+      if (retries > 0) {
+        await new Promise(r => setTimeout(r, 1500));
+        return fetchCategoryNews(category, retries - 1);
+      }
+      return [];
+    }
+  }
+
+  // Fallback: fetch general news if categories all fail
+  async function fetchGeneralNews() {
+    try {
+      const url = `${BASE_URL}?apikey=${API_KEY}&country=us&language=en&size=20`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('General news failed');
+      const data = await res.json();
+      if (data.status === 'error') throw new Error(data.message);
+      return (data.results || []).map(a => ({ ...a, category: 'general' }));
     } catch(e) {
-      console.warn(`Failed ${category}:`, e.message);
+      console.error('General fallback failed:', e);
       return [];
     }
   }
@@ -609,29 +619,40 @@
     emptyState.classList.add('hidden');
 
     try {
-      const results = await Promise.all(CATEGORIES.map(fetchCategoryNews));
-      let combined  = results.flat();
+      // First try categories
+      let results = await Promise.all(CATEGORIES.map(cat => fetchCategoryNews(cat)));
+      let combined = results.flat();
 
+      // If still empty, try fallback
+      if (combined.length === 0) {
+        console.warn('No articles from categories, trying general fallback...');
+        const fallbackArticles = await fetchGeneralNews();
+        combined = fallbackArticles;
+      }
+
+      // Remove duplicates by link
       const seen = new Map();
       for (const a of combined) {
         if (!a.title) continue;
-        const k = a.link || a.title;
-        if (!seen.has(k)) seen.set(k, a);
+        const key = a.link || a.title;
+        if (!seen.has(key)) seen.set(key, a);
       }
       combined = Array.from(seen.values());
 
-      if (!combined.length) throw new Error('No articles returned');
+      if (combined.length === 0) throw new Error('No articles returned from any source');
 
       allArticles = shuffleArray(combined);
       loadingSkel.style.display = 'none';
       renderNews();
     } catch(err) {
       loadingSkel.style.display = 'none';
+      console.error('Fatal fetch error:', err);
       newsGrid.innerHTML = `
         <div style="grid-column:1/-1;text-align:center;padding:80px 0;color:var(--muted)">
-          <p style="font-size:32px;margin-bottom:12px">⚠</p>
+          <p style="font-size:32px;margin-bottom:12px">⚠️</p>
           <p style="color:var(--danger);margin-bottom:6px">Failed to load news</p>
-          <p style="font-size:13px">${err.message}</p>
+          <p style="font-size:13px;max-width:400px;margin:0 auto;">${err.message}</p>
+          <p style="font-size:12px;margin-top:12px;opacity:0.7;">Check console (F12) for details. Free tier may be rate-limited.</p>
           <button onclick="location.reload()" style="margin-top:20px;padding:8px 20px;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:6px;cursor:pointer;font-family:inherit;font-size:13px">
             Retry
           </button>
@@ -640,7 +661,8 @@
   }
 
   function catLabel(cat) {
-    return { technology:'Technology', business:'Business', science:'Science', health:'Health' }[cat] || 'General';
+    const map = { technology:'Technology', business:'Business', science:'Science', health:'Health', general:'General' };
+    return map[cat] || 'General';
   }
 
   function renderNews() {
@@ -661,15 +683,11 @@
     filtered.forEach(article => {
       const card = document.createElement('div');
       card.className = 'news-card';
-
       const cat = article.category || 'general';
-      // if image_url is missing or invalid, use random related image
-      const originalSrc = article.image_url && article.image_url.trim() !== '' ? article.image_url : null;
-      const fallbackSrc = getRandomRelatedImage(cat);
-      const finalSrc = originalSrc || fallbackSrc;
-
-      const title  = article.title       || 'Untitled';
-      const desc   = article.description || 'Click to read the full story on the original source.';
+      let finalSrc = article.image_url && article.image_url.trim() !== '' ? article.image_url : null;
+      if (!finalSrc) finalSrc = getRandomRelatedImage(cat);
+      const title = article.title || 'Untitled';
+      const desc  = article.description || 'Click to read the full story on the original source.';
       const source = article.source_name || article.source_id || 'NewsData';
 
       card.innerHTML = `
@@ -698,6 +716,7 @@
     newsGrid.appendChild(frag);
   }
 
+  // Filter buttons
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
