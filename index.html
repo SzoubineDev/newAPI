@@ -1,733 +1,336 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Nexus News • Global Intelligence</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NewsWave — Live Headlines</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg:       #0e0e0d;
-      --surface:  #161614;
-      --surface2: #1d1d1a;
-      --border:   #2a2a26;
-      --muted:    #5a5a54;
-      --sub:      #8a8a82;
-      --text:     #e8e8e2;
-      --head:     #f4f4ee;
-      --accent:   #c8a96e;
-      --accent2:  #7fa37f;
-      --accent3:  #7b9eb5;
-      --danger:   #b56b6b;
+      --ink: #0d0d0d;
+      --cream: #f5f0e8;
+      --rust: #c94a2b;
+      --gold: #d4a843;
+      --mist: #e8e2d8;
+      --steel: #3a3a3a;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; }
 
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', system-ui, sans-serif;
-      font-size: 15px;
-      line-height: 1.6;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
       min-height: 100vh;
     }
 
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    h1, h2, h3, .serif { font-family: 'Playfair Display', serif; }
 
     header {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: rgba(14,14,13,0.92);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .header-inner {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 32px;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .wordmark {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-      text-decoration: none;
-    }
-
-    .wordmark-n {
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--head);
-      letter-spacing: -0.5px;
-    }
-
-    .wordmark-dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: var(--accent);
-      margin-bottom: 2px;
-    }
-
-    .wordmark-tag {
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 500;
-      margin-left: 4px;
-    }
-
-    .pill-nav {
-      display: flex;
-      gap: 4px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      padding: 4px;
-    }
-
-    .pill-nav button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      padding: 5px 16px;
-      border-radius: 100px;
-      color: var(--sub);
-      transition: color 0.15s, background 0.15s;
-      white-space: nowrap;
-    }
-
-    .pill-nav button:hover { color: var(--text); }
-    .pill-nav button.active {
-      background: var(--surface2);
-      color: var(--head);
-      border: 1px solid var(--border);
-    }
-
-    main {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 96px 32px 80px;
+      background: var(--ink);
+      border-bottom: 3px solid var(--rust);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     .masthead {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 40px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .masthead-left h2 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(32px, 4vw, 52px);
-      font-weight: 700;
-      color: var(--head);
-      line-height: 1.1;
+      font-weight: 900;
+      font-size: clamp(2rem, 5vw, 3.2rem);
       letter-spacing: -1px;
+      color: var(--cream);
     }
 
-    .masthead-left h2 em {
-      font-style: italic;
-      color: var(--accent);
-    }
-
-    .masthead-left p {
-      margin-top: 8px;
-      font-size: 13px;
-      color: var(--muted);
-      letter-spacing: 0.04em;
-    }
-
-    .live-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
+    .dateline {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--accent2);
-      background: rgba(127,163,127,0.08);
-      border: 1px solid rgba(127,163,127,0.2);
-      padding: 5px 12px;
-      border-radius: 100px;
-      margin-top: 12px;
+      color: var(--gold);
     }
 
-    .live-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--accent2);
-      animation: pulse 2s ease-in-out infinite;
+    .filter-bar {
+      background: var(--mist);
+      border-bottom: 1px solid #d4cfc6;
+      overflow-x: auto;
+      scrollbar-width: none;
     }
+    .filter-bar::-webkit-scrollbar { display: none; }
 
-    @keyframes pulse {
-      0%,100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.8); }
-    }
-
-    .masthead-right {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 10px;
-      flex-shrink: 0;
-    }
-
-    .stat-chip {
-      font-size: 13px;
-      color: var(--sub);
-    }
-
-    .stat-chip strong {
-      color: var(--head);
+    .filter-btn {
+      font-size: 0.72rem;
       font-weight: 600;
-      margin-right: 2px;
-    }
-
-    .btn-refresh {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      padding: 8px 18px;
-      border-radius: 8px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.6rem 1.2rem;
+      border-radius: 2px;
+      border: 1.5px solid transparent;
       cursor: pointer;
-      transition: border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+      transition: all 0.18s ease;
+      background: transparent;
+      color: var(--steel);
     }
+    .filter-btn:hover { background: var(--ink); color: var(--cream); }
+    .filter-btn.active { background: var(--rust); color: #fff; border-color: var(--rust); }
 
-    .btn-refresh:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .btn-refresh svg {
-      width: 14px; height: 14px;
-      transition: transform 0.4s;
-    }
-
-    .btn-refresh:hover svg { transform: rotate(180deg); }
-
-    #newsGrid {
+    .news-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5px;
+      background: #c8c2b8;
+    }
+
+    .card {
+      background: var(--cream);
+      cursor: pointer;
       overflow: hidden;
+      position: relative;
+      transition: transform 0.2s ease;
     }
+    .card:hover { transform: scale(1.01); z-index: 2; }
 
-    .news-card {
-      background: var(--surface);
-      display: flex;
-      flex-direction: column;
-      transition: background 0.2s;
-      height: 100%;
+    .card-hero   { grid-column: span 8; min-height: 420px; }
+    .card-side   { grid-column: span 4; min-height: 210px; }
+    .card-medium { grid-column: span 6; min-height: 280px; }
+    .card-small  { grid-column: span 4; min-height: 200px; }
+    .card-strip  { grid-column: span 3; min-height: 200px; }
+
+    @media (max-width: 900px) {
+      .card-hero   { grid-column: span 12; min-height: 320px; }
+      .card-side   { grid-column: span 6; min-height: 200px; }
+      .card-medium { grid-column: span 6; min-height: 240px; }
+      .card-small  { grid-column: span 6; min-height: 200px; }
+      .card-strip  { grid-column: span 6; min-height: 180px; }
     }
-
-    .news-card:hover { background: var(--surface2); }
+    @media (max-width: 600px) {
+      .card-hero, .card-side, .card-medium, .card-small, .card-strip {
+        grid-column: span 12; min-height: 200px;
+      }
+    }
 
     .card-img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      display: block;
-      border-bottom: 1px solid var(--border);
-      filter: brightness(0.85) saturate(0.9);
-      transition: filter 0.3s;
+      width: 100%; height: 55%;
+      object-fit: cover; display: block;
+      transition: transform 0.4s ease;
     }
+    .card:hover .card-img { transform: scale(1.04); }
 
-    .news-card:hover .card-img { filter: brightness(0.95) saturate(1); }
+    .card-body { padding: 1rem 1.1rem 1.2rem; }
 
-    .card-body {
-      padding: 20px 22px 24px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .card-meta {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .cat-pill {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 2px 8px;
-      border-radius: 3px;
-    }
-
-    .cat-pill.technology { background: rgba(123,158,181,0.12); color: var(--accent3); }
-    .cat-pill.business   { background: rgba(200,169,110,0.12); color: var(--accent);  }
-    .cat-pill.science    { background: rgba(127,163,127,0.12); color: var(--accent2); }
-    .cat-pill.health     { background: rgba(181,107,107,0.12); color: var(--danger);  }
-    .cat-pill.general    { background: rgba(90,90,84,0.15);    color: var(--sub);     }
-
-    .card-time {
-      font-size: 11px;
-      color: var(--muted);
-      font-weight: 400;
+    .card-source {
+      font-size: 0.62rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--rust); margin-bottom: 0.35rem;
     }
 
     .card-title {
       font-family: 'Playfair Display', serif;
-      font-size: 17px;
-      font-weight: 600;
-      line-height: 1.35;
-      color: var(--head);
-      margin-bottom: 10px;
-      text-decoration: none;
-      display: block;
-      transition: color 0.15s;
+      font-weight: 700; line-height: 1.28; margin-bottom: 0.5rem;
     }
-
-    .card-title:hover { color: var(--accent); }
+    .card-hero   .card-title { font-size: clamp(1.3rem, 2.5vw, 1.9rem); }
+    .card-side   .card-title { font-size: 1.05rem; }
+    .card-medium .card-title { font-size: 1.2rem; }
+    .card-small  .card-title { font-size: 0.98rem; }
+    .card-strip  .card-title { font-size: 0.9rem; }
 
     .card-desc {
-      font-size: 13px;
-      color: var(--sub);
-      line-height: 1.6;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      flex: 1;
+      font-size: 0.82rem; color: var(--steel); line-height: 1.55;
+      display: -webkit-box; -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical; overflow: hidden;
     }
+    .card-hero .card-desc { -webkit-line-clamp: 4; font-size: 0.9rem; }
 
-    .card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 16px;
-      padding-top: 14px;
-      border-top: 1px solid var(--border);
+    .card-time { font-size: 0.65rem; color: #888; margin-top: 0.6rem; }
+
+    .skeleton-block {
+      background: linear-gradient(90deg, #e0dbd2 25%, #ccc7bd 50%, #e0dbd2 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 2px;
     }
-
-    .card-source {
-      font-size: 11px;
-      color: var(--muted);
-      font-weight: 500;
-      letter-spacing: 0.04em;
-    }
-
-    .card-link {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--sub);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      transition: color 0.15s;
-    }
-
-    .card-link:hover { color: var(--accent); }
-
-    .card-link svg {
-      width: 12px; height: 12px;
-      transition: transform 0.15s;
-    }
-
-    .card-link:hover svg { transform: translate(2px,-2px); }
-
-    #loadingSkeleton {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .skel {
-      background: var(--surface);
-      padding: 0;
-    }
-
-    .skel-img { width:100%; height:200px; background: var(--surface2); }
-    .skel-body { padding: 20px 22px; }
-    .skel-line {
-      height: 12px;
-      background: var(--surface2);
-      border-radius: 3px;
-      margin-bottom: 10px;
-      animation: shimmer 1.5s ease-in-out infinite;
-    }
-
     @keyframes shimmer {
-      0%,100% { opacity: 0.5; }
-      50% { opacity: 1; }
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
     }
 
-    #emptyState {
-      text-align: center;
-      padding: 80px 0;
-      color: var(--muted);
+    .status-bar {
+      font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #888; padding: 0.5rem 1.5rem;
+      background: var(--mist); border-bottom: 1px solid #d4cfc6;
+      display: flex; align-items: center; gap: 0.6rem;
     }
+    .live-dot {
+      width: 7px; height: 7px; background: var(--rust);
+      border-radius: 50%; display: inline-block;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
 
-    #emptyState h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
-      color: var(--head);
-      margin-bottom: 8px;
-    }
+    .notice { grid-column: span 12; text-align: center; padding: 4rem 2rem; }
+    .notice h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .notice p  { color: #888; font-size: 0.9rem; }
 
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 24px 32px;
-      text-align: center;
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing: 0.04em;
-    }
-
-    @media (max-width: 900px) {
-      .pill-nav { display: none; }
-      #newsGrid,
-      #loadingSkeleton {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .header-inner { padding: 0 16px; }
-      main { padding: 80px 16px 60px; }
-      #newsGrid,
-      #loadingSkeleton {
-        grid-template-columns: 1fr;
-      }
-      .masthead { flex-direction: column; align-items: flex-start; }
-      .masthead-right { align-items: flex-start; }
-    }
+    .fade-in { animation: fadeUp 0.35s ease forwards; opacity: 0; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:none;} }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="header-inner">
-      <a href="#" class="wordmark">
-        <span class="wordmark-n">Nexus</span>
-        <span class="wordmark-dot"></span>
-        <span class="wordmark-tag">News</span>
-      </a>
-      <nav class="pill-nav">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="technology">Technology</button>
-        <button class="filter-btn" data-filter="business">Business</button>
-        <button class="filter-btn" data-filter="science">Science</button>
-        <button class="filter-btn" data-filter="health">Health</button>
-      </nav>
+    <div class="max-w-screen-xl mx-auto px-5 py-3 flex items-center justify-between">
+      <div>
+        <div class="masthead">NewsWave</div>
+        <div class="dateline" id="dateline">Loading date…</div>
+      </div>
+      <div class="text-right hidden sm:block">
+        <div class="text-xs text-gray-400 leading-relaxed">Live · Global · Unfiltered</div>
+      </div>
     </div>
   </header>
 
-  <main>
-    <div class="masthead">
-      <div class="masthead-left">
-        <h2>Global<br><em>Intelligence</em></h2>
-        <p>Curated stories · Real-time feed · NewsData.io</p>
-        <div class="live-badge">
-          <span class="live-dot"></span>
-          Live
-        </div>
-      </div>
-      <div class="masthead-right">
-        <span class="stat-chip"><strong id="newsCount">0</strong> articles loaded</span>
-        <button id="refreshBtn" class="btn-refresh">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-          </svg>
-          Refresh
-        </button>
-      </div>
+  <div class="filter-bar sticky top-[70px] z-50">
+    <div class="max-w-screen-xl mx-auto px-4 py-2 flex gap-2 items-center flex-nowrap">
+      <button class="filter-btn active" data-category="general" data-country="us">🌐 Top News</button>
+      <button class="filter-btn" data-category="business" data-country="us">📈 Business</button>
+      <button class="filter-btn" data-category="technology" data-country="us">💻 Technology</button>
+      <button class="filter-btn" data-category="science" data-country="us">🔬 Science</button>
+      <button class="filter-btn" data-category="health" data-country="us">🏥 Health</button>
+      <button class="filter-btn" data-category="entertainment" data-country="us">🎬 Entertainment</button>
+      <button class="filter-btn" data-category="sports" data-country="us">⚽ Sports</button>
+      <button class="filter-btn" data-query="apple" data-mode="everything">🍎 Apple</button>
+      <button class="filter-btn" data-query="tesla" data-mode="everything">⚡ Tesla</button>
+      <button class="filter-btn" data-query="AI artificial intelligence" data-mode="everything">🤖 AI</button>
     </div>
+  </div>
 
-    <div id="loadingSkeleton">
-      <div class="skel"><div class="skel-img"></div><div class="skel-body"><div class="skel-line" style="width:30%"></div><div class="skel-line" style="width:80%;height:16px"></div><div class="skel-line" style="width:60%"></div></div></div>
-      <div class="skel"><div class="skel-img"></div><div class="skel-body"><div class="skel-line" style="width:30%"></div><div class="skel-line" style="width:75%;height:16px"></div><div class="skel-line" style="width:55%"></div></div></div>
-      <div class="skel"><div class="skel-img"></div><div class="skel-body"><div class="skel-line" style="width:30%"></div><div class="skel-line" style="width:70%;height:16px"></div><div class="skel-line" style="width:60%"></div></div></div>
-      <div class="skel"><div class="skel-img"></div><div class="skel-body"><div class="skel-line" style="width:25%"></div><div class="skel-line" style="width:80%;height:16px"></div><div class="skel-line" style="width:50%"></div></div></div>
-      <div class="skel"><div class="skel-img"></div><div class="skel-body"><div class="skel-line" style="width:28%"></div><div class="skel-line" style="width:65%;height:16px"></div><div class="skel-line" style="width:55%"></div></div></div>
-    </div>
+  <div class="status-bar">
+    <span class="live-dot"></span>
+    <span id="status-text">Fetching headlines…</span>
+  </div>
 
-    <div id="newsGrid"></div>
-    <div id="emptyState" class="hidden">
-      <h3>No stories found</h3>
-      <p>Try a different category or refresh the feed.</p>
-    </div>
+  <main class="max-w-screen-xl mx-auto p-2 md:p-3">
+    <div class="news-grid" id="grid"></div>
   </main>
 
-  <footer>
-    Powered by NewsData.io &nbsp;·&nbsp; Real-time global intelligence &nbsp;·&nbsp; All rights reserved
+  <footer class="text-center py-8 text-xs text-gray-400 tracking-widest uppercase">
+    Powered by NewsAPI &nbsp;·&nbsp; NewsWave &copy; 2026
   </footer>
 
 <script>
-  const API_KEY  = 'pub_6d346a8889c244e587c1c5894de292bb';
-  const BASE_URL = 'https://newsdata.io/api/1/latest';
-  const CATEGORIES = ['technology', 'business', 'science', 'health'];
+  // ── All API calls go through the Netlify serverless proxy ──
+  const PROXY = '/.netlify/functions/news';
 
-  let allArticles  = [];
-  let currentFilter = 'all';
+  const now = new Date();
+  document.getElementById('dateline').textContent =
+    now.toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
 
-  const newsGrid       = document.getElementById('newsGrid');
-  const loadingSkel    = document.getElementById('loadingSkeleton');
-  const emptyState     = document.getElementById('emptyState');
-  const refreshBtn     = document.getElementById('refreshBtn');
-  const newsCountSpan  = document.getElementById('newsCount');
+  const layoutCycle = ['card-hero','card-side','card-side','card-medium','card-medium','card-small','card-small','card-strip','card-strip','card-strip'];
 
-  // ----- RANDOM RELATED IMAGES PER CATEGORY (high-quality, royalty‑free)
-  const categoryImages = {
-    technology: [
-      'https://images.pexels.com/photos/3585295/pexels-photo-3585295.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg?w=800&h=500&fit=crop'
-    ],
-    business: [
-      'https://images.pexels.com/photos/6802045/pexels-photo-6802045.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/4427810/pexels-photo-4427810.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/7146985/pexels-photo-7146985.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?w=800&h=500&fit=crop'
-    ],
-    science: [
-      'https://images.pexels.com/photos/256383/pexels-photo-256383.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/373543/pexels-photo-373543.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/3987116/pexels-photo-3987116.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/2280571/pexels-photo-2280571.jpeg?w=800&h=500&fit=crop'
-    ],
-    health: [
-      'https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/2280547/pexels-photo-2280547.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/3768915/pexels-photo-3768915.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/4386466/pexels-photo-4386466.jpeg?w=800&h=500&fit=crop'
-    ],
-    general: [
-      'https://images.pexels.com/photos/261763/pexels-photo-261763.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?w=800&h=500&fit=crop',
-      'https://images.pexels.com/photos/113395/pexels-photo-113395.jpeg?w=800&h=500&fit=crop'
-    ]
-  };
-
-  function getRandomRelatedImage(category) {
-    const key = category && categoryImages[category] ? category : 'general';
-    const images = categoryImages[key];
-    return images[Math.floor(Math.random() * images.length)];
+  function getSizes(count) {
+    return Array.from({length: count}, (_, i) => layoutCycle[i % layoutCycle.length]);
   }
 
-  function shuffleArray(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
+  function timeAgo(dateStr) {
+    const diff = (Date.now() - new Date(dateStr)) / 1000;
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
+    if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
+    return `${Math.floor(diff/86400)}d ago`;
   }
 
-  function formatDate(dateString) {
-    if (!dateString) return 'Just now';
-    try {
-      const date = new Date(dateString);
-      const diffMs   = Date.now() - date;
-      const diffMins  = Math.floor(diffMs / 60000);
-      const diffHours = Math.floor(diffMs / 3600000);
-      const diffDays  = Math.floor(diffMs / 86400000);
-      if (diffMins  < 1)  return 'Just now';
-      if (diffMins  < 60) return `${diffMins}m ago`;
-      if (diffHours < 24) return `${diffHours}h ago`;
-      if (diffDays  < 7)  return `${diffDays}d ago`;
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    } catch(e) { return 'Recent'; }
+  function showSkeletons() {
+    const grid = document.getElementById('grid');
+    grid.innerHTML = Array.from({length: 6}, (_, i) => `
+      <div class="card ${layoutCycle[i]} fade-in" style="animation-delay:${i*0.05}s">
+        <div class="skeleton-block" style="height:55%;min-height:80px;"></div>
+        <div class="card-body">
+          <div class="skeleton-block" style="height:11px;width:35%;margin-bottom:10px;"></div>
+          <div class="skeleton-block" style="height:20px;margin-bottom:8px;"></div>
+          <div class="skeleton-block" style="height:14px;width:75%;"></div>
+        </div>
+      </div>`).join('');
   }
 
-  // Fetch a single category with retry logic
-  async function fetchCategoryNews(category, retries = 1) {
-    try {
-      const url = `${BASE_URL}?apikey=${API_KEY}&category=${category}&language=en&size=15`;
-      console.log(`Fetching ${category}:`, url);
-      const ctrl = new AbortController();
-      const tid  = setTimeout(() => ctrl.abort(), 12000);
-      const res  = await fetch(url, { signal: ctrl.signal });
-      clearTimeout(tid);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      console.log(`${category} response:`, data);
-      if (data.status === 'error') throw new Error(data.message);
-      const articles = data.results || [];
-      if (articles.length === 0 && retries > 0) {
-        console.warn(`${category} returned 0 articles, retrying...`);
-        await new Promise(r => setTimeout(r, 1000));
-        return fetchCategoryNews(category, retries - 1);
-      }
-      return articles.map(a => ({ ...a, category }));
-    } catch (err) {
-      console.error(`Failed ${category}:`, err.message);
-      if (retries > 0) {
-        await new Promise(r => setTimeout(r, 1500));
-        return fetchCategoryNews(category, retries - 1);
-      }
-      return [];
-    }
-  }
+  function renderCards(articles) {
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
 
-  // Fallback: fetch general news if categories all fail
-  async function fetchGeneralNews() {
-    try {
-      const url = `${BASE_URL}?apikey=${API_KEY}&country=us&language=en&size=20`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('General news failed');
-      const data = await res.json();
-      if (data.status === 'error') throw new Error(data.message);
-      return (data.results || []).map(a => ({ ...a, category: 'general' }));
-    } catch(e) {
-      console.error('General fallback failed:', e);
-      return [];
-    }
-  }
-
-  async function fetchAllNews() {
-    loadingSkel.style.display = 'grid';
-    newsGrid.innerHTML = '';
-    emptyState.classList.add('hidden');
-
-    try {
-      // First try categories
-      let results = await Promise.all(CATEGORIES.map(cat => fetchCategoryNews(cat)));
-      let combined = results.flat();
-
-      // If still empty, try fallback
-      if (combined.length === 0) {
-        console.warn('No articles from categories, trying general fallback...');
-        const fallbackArticles = await fetchGeneralNews();
-        combined = fallbackArticles;
-      }
-
-      // Remove duplicates by link
-      const seen = new Map();
-      for (const a of combined) {
-        if (!a.title) continue;
-        const key = a.link || a.title;
-        if (!seen.has(key)) seen.set(key, a);
-      }
-      combined = Array.from(seen.values());
-
-      if (combined.length === 0) throw new Error('No articles returned from any source');
-
-      allArticles = shuffleArray(combined);
-      loadingSkel.style.display = 'none';
-      renderNews();
-    } catch(err) {
-      loadingSkel.style.display = 'none';
-      console.error('Fatal fetch error:', err);
-      newsGrid.innerHTML = `
-        <div style="grid-column:1/-1;text-align:center;padding:80px 0;color:var(--muted)">
-          <p style="font-size:32px;margin-bottom:12px">⚠️</p>
-          <p style="color:var(--danger);margin-bottom:6px">Failed to load news</p>
-          <p style="font-size:13px;max-width:400px;margin:0 auto;">${err.message}</p>
-          <p style="font-size:12px;margin-top:12px;opacity:0.7;">Check console (F12) for details. Free tier may be rate-limited.</p>
-          <button onclick="location.reload()" style="margin-top:20px;padding:8px 20px;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:6px;cursor:pointer;font-family:inherit;font-size:13px">
-            Retry
-          </button>
-        </div>`;
-    }
-  }
-
-  function catLabel(cat) {
-    const map = { technology:'Technology', business:'Business', science:'Science', health:'Health', general:'General' };
-    return map[cat] || 'General';
-  }
-
-  function renderNews() {
-    const filtered = currentFilter === 'all'
-      ? [...allArticles]
-      : allArticles.filter(a => a.category === currentFilter);
-
-    newsCountSpan.textContent = filtered.length;
-
-    if (!filtered.length) {
-      newsGrid.innerHTML = '';
-      emptyState.classList.remove('hidden');
+    if (!articles || articles.length === 0) {
+      grid.innerHTML = `<div class="notice"><h2>No stories found</h2><p>Try a different category.</p></div>`;
       return;
     }
-    emptyState.classList.add('hidden');
 
-    const frag = document.createDocumentFragment();
-    filtered.forEach(article => {
+    const sizes = getSizes(articles.length);
+
+    articles.forEach((article, i) => {
+      if (!article.title || article.title === '[Removed]') return;
+
       const card = document.createElement('div');
-      card.className = 'news-card';
-      const cat = article.category || 'general';
-      let finalSrc = article.image_url && article.image_url.trim() !== '' ? article.image_url : null;
-      if (!finalSrc) finalSrc = getRandomRelatedImage(cat);
-      const title = article.title || 'Untitled';
-      const desc  = article.description || 'Click to read the full story on the original source.';
-      const source = article.source_name || article.source_id || 'NewsData';
+      card.className = `card ${sizes[i]} fade-in`;
+      card.style.animationDelay = `${i * 0.04}s`;
+
+      const img = article.urlToImage
+        ? `<img class="card-img" src="${article.urlToImage}" alt="" loading="lazy" onerror="this.style.display='none'">`
+        : `<div style="height:55%;min-height:80px;background:linear-gradient(135deg,#1a1a1a,#3a2a1a);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:2rem;font-family:'Playfair Display',serif;">NW</div>`;
 
       card.innerHTML = `
-        <img class="card-img" src="${finalSrc}" alt="" onerror="this.onerror=null; this.src='${getRandomRelatedImage(cat)}'">
+        ${img}
         <div class="card-body">
-          <div class="card-meta">
-            <span class="cat-pill ${cat}">${catLabel(cat)}</span>
-            <span class="card-time">${formatDate(article.pubDate)}</span>
-          </div>
-          <a href="${article.link}" target="_blank" rel="noopener noreferrer" class="card-title">${title}</a>
-          <p class="card-desc">${desc}</p>
-          <div class="card-footer">
-            <span class="card-source">${source}</span>
-            <a href="${article.link}" target="_blank" rel="noopener noreferrer" class="card-link">
-              Read
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M7 7h10v10"/>
-              </svg>
-            </a>
-          </div>
+          <div class="card-source">${article.source?.name || 'Unknown'}</div>
+          <div class="card-title">${article.title}</div>
+          ${article.description ? `<div class="card-desc">${article.description}</div>` : ''}
+          <div class="card-time">${timeAgo(article.publishedAt)}</div>
         </div>`;
-      frag.appendChild(card);
-    });
 
-    newsGrid.innerHTML = '';
-    newsGrid.appendChild(frag);
+      card.addEventListener('click', () => { if (article.url) window.open(article.url, '_blank'); });
+      grid.appendChild(card);
+    });
   }
 
-  // Filter buttons
+  async function fetchNews(btn) {
+    showSkeletons();
+    document.getElementById('status-text').textContent = 'Loading…';
+
+    // Build query params — the proxy forwards them to NewsAPI
+    const params = new URLSearchParams({ pageSize: 20, language: 'en' });
+
+    if (btn.dataset.mode === 'everything') {
+      const yesterday = new Date(Date.now() - 2 * 86400000).toISOString().split('T')[0];
+      params.set('q', btn.dataset.query);
+      params.set('from', yesterday);
+      params.set('sortBy', 'popularity');
+    } else {
+      params.set('country', btn.dataset.country || 'us');
+      params.set('category', btn.dataset.category);
+    }
+
+    try {
+      const resp = await fetch(`${PROXY}?${params}`);
+      const data = await resp.json();
+
+      if (data.status !== 'ok') throw new Error(data.message || 'API error');
+
+      document.getElementById('status-text').textContent =
+        `${(data.totalResults || 0).toLocaleString()} stories · Updated ${new Date().toLocaleTimeString()}`;
+      renderCards(data.articles);
+    } catch (err) {
+      document.getElementById('status-text').textContent = 'Error loading news';
+      document.getElementById('grid').innerHTML =
+        `<div class="notice"><h2>Couldn't load stories</h2><p>${err.message}</p></div>`;
+    }
+  }
+
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      currentFilter = btn.dataset.filter;
-      renderNews();
+      fetchNews(btn);
     });
   });
 
-  refreshBtn.addEventListener('click', fetchAllNews);
-  fetchAllNews();
+  fetchNews(document.querySelector('.filter-btn.active'));
 </script>
 </body>
 </html>

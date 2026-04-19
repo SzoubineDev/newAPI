@@ -1,31 +1,31 @@
-exports.handler = async function(event, context) {
-  const API_KEY = 'd3343faad5c34d0598ec357627d1cecb';
-  const { source, endpoint } = event.queryStringParameters;
-  
-  let url;
-  if (source === 'wsj') {
-    url = `https://newsapi.org/v2/everything?domains=wsj.com&apiKey=${API_KEY}`;
-  } else if (source === 'techcrunch') {
-    url = `https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=${API_KEY}`;
-  } else if (source === 'business') {
-    url = `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=${API_KEY}`;
-  }
-  
+exports.handler = async function (event) {
+  const API_KEY = process.env.NEWS_API_KEY;
+  const params = event.queryStringParameters || {};
+
+  // Build the NewsAPI URL from whatever params the frontend sends
+  const base = params.q
+    ? "https://newsapi.org/v2/everything"
+    : "https://newsapi.org/v2/top-headlines";
+
+  const query = new URLSearchParams({ ...params, apiKey: API_KEY }).toString();
+  const url = `${base}?${query}`;
+
   try {
     const response = await fetch(url);
     const data = await response.json();
+
     return {
       statusCode: 200,
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     };
-  } catch (error) {
+  } catch (err) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to fetch news' })
+      body: JSON.stringify({ status: "error", message: err.message }),
     };
   }
 };
